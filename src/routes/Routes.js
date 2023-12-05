@@ -7,6 +7,8 @@ import ProductDetail from '../app/components/Home/ProductDetail/ProductDetail'
 import { Products } from '../app/components/Shop/Products/Products'
 import Login from '../app/auth/Login/Login'
 import Register from '../app/auth/Register/Register'
+import ForgotPassword from '../app/account/ForgotPassword'
+import ResetPassword from '../app/account/ResetPassword'
 
 const AppRoutes = () => {
     return (
@@ -17,10 +19,8 @@ const AppRoutes = () => {
             <Route path={ROUTES.SHOP} element={<Products />} />
             <Route path={ROUTES.USER.LOGIN} element={<Login />} />
             <Route path={ROUTES.USER.REGISTER} element={<Register />} />
-            {/*
             <Route path={ROUTES.USER.FORGOTPASSWORD} element={<ForgotPassword />} />
-            <Route path={ROUTES.USER.RESETPASSWORD} element={<ResetPassword />} /> 
-            */}
+            <Route path={ROUTES.USER.RESETPASSWORD} element={<ResetPassword />} />
         </Routes>
     )
 }

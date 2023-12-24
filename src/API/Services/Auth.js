@@ -27,4 +27,8 @@ export class AuthService extends HttpClient {
     async forgotPassword(body) {
         return await this.post(`api/accounts/forgotpassword`, body)
     }
+
+    async resetPassword(body) {
+        return await this.post(`api/accounts/resetpasswordchange`, body)
+    }
 }

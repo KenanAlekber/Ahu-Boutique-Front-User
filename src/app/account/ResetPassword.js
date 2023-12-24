@@ -9,29 +9,48 @@ import {
     Heading,
     useColorModeValue,
     InputGroup,
+    Alert,
+    AlertIcon,
 } from '@chakra-ui/react'
 import React from 'react';
 import Navbar from '../components/Home/Navbar/Navbar';
 import Footer from '../components/Home/Footer/Footer';
+import { useMutation } from 'react-query';
+import { useService } from '../../API/Services';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../routes/const';
 
 export default function ResetPassword() {
     const [showPassword, setShowPassword] = React.useState(false)
     const [token, setToken] = React.useState("");
     const [email, setEmail] = React.useState("");
+    const [resetPass, setResetPass] = React.useState()
+    const { authService } = useService()
+    const navigate = useNavigate()
 
-    // const handleOnChangeInput = ({ target: { name, value } }) => {
-    //     setLoginData((prev) => ({ ...prev, [name]: value }))
-    // }
+    const handleOnChangeInput = ({ target: { name, value } }) => {
+        setResetPass((prev) => ({ ...prev, [name]: value }))
+    }
 
-    console.log(token);
-    console.log(email);
+    const { mutateAsync: mutateResetPassword } = useMutation((body) => { authService.resetPassword(body) }, {
+        onSuccess: () => navigate(ROUTES.USER.LOGIN),
+        onError: () => <Alert status='error'><AlertIcon />Something went wrong</Alert>
+    })
+
+    const handleSumbitResetPassword = () => {
+        mutateResetPassword({
+            email,
+            token,
+            password: resetPass.password,
+            confirmPassword: resetPass.confirmPassword,
+        })
+    }
 
     React.useEffect(() => {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const params = Object.fromEntries(urlSearchParams.entries());
-        const tokenParam = params?.token;
+        const tokenParam = params?.encodedToken;
         const emailParam = params?.email;
-
         setToken(tokenParam);
         setEmail(emailParam);
     }, []);
@@ -58,17 +77,16 @@ export default function ResetPassword() {
                             <FormControl id="password" isRequired>
                                 <FormLabel>Password</FormLabel>
                                 <InputGroup>
-                                    {/* onChange={(e) => handleOnChangeInput(e)} */}
-                                    <Input type={showPassword ? 'text' : 'password'} name='password' placeholder='Enter your Password' />
+                                    <Input onChange={(e) => handleOnChangeInput(e)} type={showPassword ? 'text' : 'password'} name='password' placeholder='Enter your Password' />
                                 </InputGroup>
                             </FormControl>
                             <FormControl id="ConfirmPassword" isRequired>
                                 <FormLabel>Confirm Password</FormLabel>
                                 <InputGroup>
-                                    <Input type={showPassword ? 'text' : 'ConfirmPassword'} name='ConfirmPassword' placeholder='Enter your Confirm Password' />
+                                    <Input onChange={(e) => handleOnChangeInput(e)} type={showPassword ? 'text' : 'password'} name='confirmPassword' placeholder='Enter your Confirm Password' />
                                 </InputGroup>
                             </FormControl>
-                            <Button bg={'red'} color={'white'} _hover={{ bg: 'white', color: 'red' }}>Reset Password</Button>
+                            <Button onClick={() => handleSumbitResetPassword()} bg={'red'} color={'white'} _hover={{ bg: 'white', color: 'red' }}>Reset Password</Button>
                         </Stack>
                     </Box>
                 </Stack>

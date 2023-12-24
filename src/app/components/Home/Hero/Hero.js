@@ -8,7 +8,7 @@ export function Hero() {
                 <h1 className='hero-text-header'>AHU BOUTIQUE</h1>
                 <p className='hero-text-title'>Shop the world’s best boutiques !</p>
             </div>
-            <a><img className='hero-image' /></a>
+            <img className='hero-image' />
         </div>
     )
 }
